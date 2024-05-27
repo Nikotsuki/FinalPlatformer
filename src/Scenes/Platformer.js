@@ -114,7 +114,7 @@ class Platformer extends Phaser.Scene {
         this.cameras.main.startFollow(my.sprite.player, true, 0.25, 0.25); // (target, [,roundPixels][,lerpX][,lerpY])
         this.cameras.main.setDeadzone(50, 50);
         this.cameras.main.centerOn(my.sprite.player.x, my.sprite.player.y);
-        this.cameras.main.setZoom(0.7);
+        this.cameras.main.setZoom(1.0);
 
     }
 
