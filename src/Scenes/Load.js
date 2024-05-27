@@ -7,16 +7,37 @@ class Load extends Phaser.Scene {
         this.load.setPath("./assets/");
 
         // Load characters spritesheet
-        this.load.atlas("platformer_characters", "tilemap-characters-packed.png", "tilemap-characters-packed.json");
+        //this.load.atlas("platformer_characters", "monochrome_tilemap_packed.png", "monochrome_tilemap.json");
 
+        
+
+        this.load.image("player_idle", "tile_0240.png");
+        this.load.image("player_walk_1", "tile_0241.png");
+        this.load.image("player_walk_2", "tile_0242.png");
+        this.load.image("player_walk_3", "tile_0243.png");
+        this.load.image("player_walk_4", "tile_0244.png");
+        this.load.image("player_jump_1", "tile_0245.png");
+        this.load.image("player_jump_2", "tile_0246.png");
+
+        this.load.image("enemy_1", "tile_0320.png");
+        this.load.image("enemy_2", "tile_0321.png");
+        this.load.image("enemy_3", "tile_0322.png");
+        this.load.image("enemy_4", "tile_0323.png");
+
+        this.load.audio("door_sound", "doorOpen_2.ogg");
+        this.load.audio("gem_sound", "jingles_NES09.ogg");
+        this.load.audio("hit", "laserLarge_001.ogg");
+        
+        this.load.image("door", "tile_0057.png");
         // Load tilemap information
-        this.load.image("tilemap_tiles", "tilemap_packed.png");                         // Packed tilemap
-        this.load.tilemapTiledJSON("platformer-level-1", "platformer-level-1.tmj");   // Tilemap in JSON
+        this.load.image("tilemap_tiles", "monochrome_tilemap_packed.png");                         // Packed tilemap
+        this.load.tilemapTiledJSON("platformer-level", "platformer-level.tmj");   // Tilemap in JSON
+        this.load.tilemapTiledJSON("platformer-level-2", "platformer-level-2.tmj");
 
         // Load the tilemap as a spritesheet
-        this.load.spritesheet("tilemap_sheet", "tilemap_packed.png", {
-            frameWidth: 18,
-            frameHeight: 18
+        this.load.spritesheet("tilemap_sheet", "monochrome_tilemap_packed.png", {
+            frameWidth: 16,
+            frameHeight: 16
         });
 
         // Oooh, fancy. A multi atlas is a texture atlas which has the textures spread
@@ -29,34 +50,46 @@ class Load extends Phaser.Scene {
     }
 
     create() {
+        
         this.anims.create({
             key: 'walk',
-            frames: this.anims.generateFrameNames('platformer_characters', {
-                prefix: "tile_",
-                start: 0,
-                end: 1,
-                suffix: ".png",
-                zeroPad: 4
-            }),
+            frames: [
+                {key: 'player_walk_1'},
+                {key: 'player_walk_2'},
+                {key: 'player_walk_3'},
+                {key: 'player_walk_4'}
+            ],
             frameRate: 15,
             repeat: -1
         });
 
         this.anims.create({
-            key: 'idle',
-            defaultTextureKey: "platformer_characters",
+            key: 'enemy',
             frames: [
-                { frame: "tile_0000.png" }
+                {key: 'enemy_1'},
+                {key: 'enemy_2'},
+                {key: 'enemy_3'}
+            ],
+            frameRate: 6,
+            repeat: 1000
+        });
+
+        this.anims.create({
+            key: 'idle',
+            frames: [
+                { key: "player_idle"}
             ],
             repeat: -1
         });
 
         this.anims.create({
             key: 'jump',
-            defaultTextureKey: "platformer_characters",
             frames: [
-                { frame: "tile_0001.png" }
+                { key: "player_jump_1" , duration: 70 },
+                {key: "player_jump_2"}
             ],
+            frameRate: 15,
+            repeat: -1
         });
 
          // ...and pass to the next Scene
