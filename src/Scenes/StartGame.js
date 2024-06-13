@@ -1,18 +1,16 @@
-class BeatGame extends Phaser.Scene {
+class StartGame extends Phaser.Scene {
     constructor(){
-        super("beatGame");
+        super("startGame");
         this.my = {text: {}};   
     }
 
-    init(data) {
+    init() {
         // variables and settings
         this.ACCELERATION = 400;
         this.DRAG = 3500;    // DRAG < ACCELERATION = icy slide
-        this.physics.world.gravity.y = 1500;
         this.JUMP_VELOCITY = -650;
-        this.PARTICLE_VELOCITY = 30;
+        this.PARTICLE_VELOCITY = 50;
         this.SCALE = 1.0;
-        this.gemsCollected = data.gemsCollected;
     }
 
     preload(){
@@ -22,6 +20,7 @@ class BeatGame extends Phaser.Scene {
 
     create(){
         this.map = this.add.tilemap("platformer-level-2", 16, 16, 30, 30);
+        this.physics.world.setBounds(0,0, 30*16, 30*16, true, true, false, false);
 
         this.tileset = this.map.addTilesetImage("1-bit-tileset", "tilemap_sheet");
 
@@ -36,18 +35,16 @@ class BeatGame extends Phaser.Scene {
             collides: true
         });
 
-        if(this.gemsCollected == null){
-            this.gemsCollected = 0;
-        }
         
         my.sprite.player = this.physics.add.sprite(250, 430, "player_idle");
         my.sprite.player.setScale(1.4);
         my.sprite.player.setCollideWorldBounds(false);
+        my.sprite.player.body.gravity.y = 1500;
 
         this.physics.add.collider(my.sprite.player, this.platformLayer2);
 
 
-        my.vfx.walking = this.add.particles(0, 2, "kenny-particles", {
+        my.vfx.walking = this.add.particles(0, 3, "kenny-particles", {
             frame: ['star_02.png', 'star_03.png'],
             scale: {start: 0.03, end: 0.05, random: false},
             lifespan: 500,
@@ -56,7 +53,7 @@ class BeatGame extends Phaser.Scene {
 
         my.vfx.jumping = this.add.particles(0, 0, "kenny-particles", {
             frame: ['flame_01.png', 'flame_02.png', 'flame_03.png', 'flame_04.png'],
-            scale: {start: 0.03, end: 0.04, random: false},
+            scale: {start: 0.04, end: 0.02, random: false},
             lifespan: 300,
             alpha: {start: 0.5, end: 0.2, gravity: 0}, 
         });
@@ -80,11 +77,10 @@ class BeatGame extends Phaser.Scene {
         my.sprite.door = this.add.sprite(420, 481, "door");
         my.sprite.door.setScale(1.4);
 
-        my.text.GameOver1 = this.add.bitmapText(game.config.width/2 - 440, game.config.height/2 - 230, "rocketSquare", " You win!");
-        my.text.GameOver1.setScale(0.9);
-        my.text.gems = this.add.bitmapText(game.config.width/2 - 630, game.config.height/2 - 150, "rocketSquare", "           You collected " + this.gemsCollected +"/9 gems!");
-        my.text.gems.setScale(0.7)
-        my.text.GameOver2 = this.add.bitmapText(game.config.width/2 - 600, game.config.height/2 - 70, "rocketSquare", "   Enter the door to play again");
+        my.text.GameOver1 = this.add.bitmapText(game.config.width/2 - 535, game.config.height/2 - 230, "rocketSquare", "Welcome to Dark Lines!");
+        my.text.GameOver1.setScale(0.7);
+        //my.text.score = this.add.bitmapText(game.config.width/2 - 255, game.config.height/2 - 50, "rocketSquare", "Your final score was  " + this.finalScore);
+        my.text.GameOver2 = this.add.bitmapText(game.config.width/2 - 650, game.config.height/2 - 140, "rocketSquare", "Reach the door at the end of the level \n          and collect gems along the way");
         my.text.GameOver2.setScale(0.7);
     }
 
@@ -93,6 +89,7 @@ class BeatGame extends Phaser.Scene {
             my.sprite.player.setAccelerationX(-this.ACCELERATION);
             my.sprite.player.setFlip(true, false);
             my.sprite.player.anims.play('walk', true);
+            // TODO: add particle following code here
             my.vfx.walking.startFollow(my.sprite.player, my.sprite.player.displayWidth/2-10, my.sprite.player.displayHeight/2-5, false);
 
             my.vfx.walking.setParticleSpeed(this.PARTICLE_VELOCITY, 0);
@@ -162,8 +159,8 @@ class BeatGame extends Phaser.Scene {
                 volume: 0.4   // Can adjust volume using this, goes from 0 to 1
             });
             this.cameras.main.stopFollow();
-            my.sprite.player.x = -2000;
-            my.sprite.player.y = -2000;
+            my.sprite.player.x = 1000;
+            my.sprite.player.y = -1000;
             this.cameras.main.fadeOut(700, 0, 0, 0);
         }
         this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {

@@ -19,23 +19,43 @@ class Load extends Phaser.Scene {
         this.load.image("player_jump_1", "tile_0245.png");
         this.load.image("player_jump_2", "tile_0246.png");
 
+        this.load.image("player2_idle", "tile_0045.png");
+        this.load.image("player2_walk", "tile_0046.png");
+
         this.load.image("enemy_1", "tile_0320.png");
         this.load.image("enemy_2", "tile_0321.png");
         this.load.image("enemy_3", "tile_0322.png");
         this.load.image("enemy_4", "tile_0323.png");
 
+        this.load.image("enemy2_1", "tile_0051.png");
+        this.load.image("enemy2_2", "tile_0052.png");
+
+        this.load.image("platform", "tile_0123.png");
+
         this.load.audio("door_sound", "doorOpen_2.ogg");
-        this.load.audio("gem_sound", "jingles_NES09.ogg");
+        this.load.audio("bounce_sound", "bounce_sound.wav");
+        this.load.audio("gem_sound", "gem_sound.wav");
+        this.load.audio("key_sound", "key_sound.wav");
+        this.load.audio("jump_sound", "jump_sound.wav");
         this.load.audio("hit", "laserLarge_001.ogg");
         
         this.load.image("door", "tile_0057.png");
+
         // Load tilemap information
         this.load.image("tilemap_tiles", "monochrome_tilemap_packed.png");                         // Packed tilemap
+        this.load.image("tilemap_tiles2", "tilemap_packed.png");
         this.load.tilemapTiledJSON("platformer-level", "platformer-level.tmj");   // Tilemap in JSON
-        this.load.tilemapTiledJSON("platformer-level-2", "platformer-level-2.tmj");
+        this.load.tilemapTiledJSON("platformer-level-2", "platformer-end-game.tmj");
+        this.load.tilemapTiledJSON("platformer-level2", "platformer-level2.tmj");
+        this.load.tilemapTiledJSON("platformer-level3", "platformer-level3.tmj");
 
         // Load the tilemap as a spritesheet
         this.load.spritesheet("tilemap_sheet", "monochrome_tilemap_packed.png", {
+            frameWidth: 16,
+            frameHeight: 16
+        });
+
+        this.load.spritesheet("tilemap_sheet2", "tilemap_packed.png", {
             frameWidth: 16,
             frameHeight: 16
         });
@@ -64,6 +84,26 @@ class Load extends Phaser.Scene {
         });
 
         this.anims.create({
+            key: 'walk2',
+            frames: [
+                {key: 'player2_idle'},
+                {key: 'player2_walk', duration: 15}
+            ],
+            frameRate: 15,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'enemy2',
+            frames: [
+                {key: 'enemy2_1'},
+                {key: 'enemy2_2', duration: 30},
+            ],
+            frameRate: 15,
+            repeat: -1
+        });
+
+        this.anims.create({
             key: 'enemy',
             frames: [
                 {key: 'enemy_1'},
@@ -83,17 +123,34 @@ class Load extends Phaser.Scene {
         });
 
         this.anims.create({
+            key: 'idle2',
+            frames: [
+                { key: "player2_idle"}
+            ],
+            repeat: -1
+        });
+
+        this.anims.create({
             key: 'jump',
             frames: [
-                { key: "player_jump_1" , duration: 70 },
-                {key: "player_jump_2"}
+                { key: "player_jump_1", duration: 20},
+                { key: "player_jump_2"}
+            ],
+            frameRate: 15,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'jump2',
+            frames: [
+                { key: "player2_walk"}
             ],
             frameRate: 15,
             repeat: -1
         });
 
          // ...and pass to the next Scene
-         this.scene.start("platformerScene");
+         this.scene.start("startGame");
     }
 
     // Never get here since a new scene is started in create()
