@@ -29,9 +29,9 @@ let config = {
             }
         }
     },
-    width: 1440,
+    width: 1400,
     height: 900,
-    scene: [Load, Platformer, BeatGame]
+    scene: [Load, Platformer, BeatGame, Level2, Level3, StartGame]
 }
 
 var cursors;
